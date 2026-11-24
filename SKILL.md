@@ -19,7 +19,7 @@ Subcommands (`8`):
 - `smith` (`rf_smith_transform`) — Free: `Z`, `Y`, `Gamma`, `VSWR`, series/parallel RLC equivalents.
 - `link` (`rf_link_budget`) — Free: Friis FSPL, EIRP/ERP, `290 K` noise floor, SNR, Fresnel radius, max range.
 - `match` (`rf_match_network`) — Metered (`$0.01`): L/Pi/T conjugate matching, `E12`–`E96` snapping, finite-Q IL, tolerance corner VSWR.
-- `txline` (`rf_txline`) — Metered (`$0.005`): Lossless/lossy `Z_in`, `Gamma_in`, `VSWR_in`, quarter-wave `Z0`.
+- `txline` (`rf_txline`) — Free: Lossless/lossy `Z_in`, `Gamma_in`, `VSWR_in`, quarter-wave `Z0`.
 - `s-param` (`rf_touchstone_analyze`) — Metered (`$0.015`): Touchstone v1.0 `.s1p`/`.s2p` (`<= 200 KB`, `<= 4096` pts), uniform single-pass phase rotation `S_ij * exp(+j * 2 * pi * f * delay_ps * 1e-12)` across `s11, s21, s12, s22` (use `delay_ps = 2 * tau` for 1-port round-trip VNA fixture extension of one-way delay `tau`), passbands, Rollett `K`.
 - `fcc` (`rf_fcc_compliance`) — Metered (`$0.02`): 47 CFR Part 15 radiated/conducted limits and ISM harmonic comb checks.
 - `serve` — Start standalone Node HTTP `402` Streamable HTTP MCP server (`--host`, `--port 0..65535`).
@@ -36,7 +36,7 @@ Reference inputs live in `fixtures/` (`antenna_915mhz.s1p`, `filter_1500mhz.s2p`
 - `GET`/`HEAD /.well-known/mcp/server-card.json` (and `GET`/`HEAD /`) — Tool catalog, pricing tiers, auth methods, and `polarCheckoutUrl`.
 - `POST /mcp` — JSON-RPC 2.0 (`initialize`, `ping`, `tools/list`, `tools/call`; flat object tool schemas without `oneOf`/`anyOf`/`allOf` and read-only/idempotent MCP `annotations`; non-POST returns `405` with `Allow: POST, OPTIONS`; CORS exposes `Mcp-Session-Id`; notifications return HTTP `202`, body > `262,144` bytes returns `413`, invalid JSON returns `400`).
 
-Authentication for metered tools (`rf_match_network`, `rf_txline`, `rf_touchstone_analyze`, `rf_fcc_compliance`):
+Authentication for metered tools (`rf_match_network`, `rf_touchstone_analyze`, `rf_fcc_compliance`):
 1. `PAYMENT-SIGNATURE` (or `X-PAYMENT` / `Authorization: Payment`) — x402 v2 verify + settle (`PAYMENT-RESPONSE` header on `200`).
 2. `X-Polar-License-Key` — Polar.sh `/validate` (`status === "granted"`).
 3. `Authorization: Bearer <token>` — Constant-time SHA-256 lookup against `API_KEYS_CSV`.

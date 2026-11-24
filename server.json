@@ -2,8 +2,8 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.raydeoliveira/rfbench",
   "title": "rfbench RF Math & FCC Compliance Oracle (MCP)",
-  "description": "Deterministic Smith-chart, matching, Touchstone S-param, and FCC Part 15 math oracle via HTTP 402.",
-  "version": "0.1.0",
+  "description": "Free Smith chart, link budget & txline + metered matching, S-param & FCC oracle via HTTP 402.",
+  "version": "0.1.1",
   "websiteUrl": "https://github.com/raydeoliveira/rfbench",
   "repository": {
     "url": "https://github.com/raydeoliveira/rfbench",
@@ -16,7 +16,7 @@
       "headers": [
         {
           "name": "X-Polar-License-Key",
-          "description": "Optional Polar.sh license key unlocking metered matching, txline, Touchstone, and FCC tools.",
+          "description": "Optional Polar.sh license key unlocking metered matching, Touchstone, and FCC Part 15 tools.",
           "isRequired": false,
           "isSecret": true
         },
