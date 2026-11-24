@@ -1,0 +1,38 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.raydeoliveira/rfbench",
+  "title": "rfbench RF Math & FCC Compliance Oracle (MCP)",
+  "description": "Deterministic Smith-chart, matching, Touchstone S-param, and FCC Part 15 math oracle via HTTP 402.",
+  "version": "0.1.0",
+  "websiteUrl": "https://github.com/raydeoliveira/rfbench",
+  "repository": {
+    "url": "https://github.com/raydeoliveira/rfbench",
+    "source": "github"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://rfbench-mcp.raymond-deoliveira.workers.dev/mcp",
+      "headers": [
+        {
+          "name": "X-Polar-License-Key",
+          "description": "Optional Polar.sh license key unlocking metered matching, txline, Touchstone, and FCC tools.",
+          "isRequired": false,
+          "isSecret": true
+        },
+        {
+          "name": "Authorization",
+          "description": "Optional Bearer API key or Payment receipt header for per-call metered tool access.",
+          "isRequired": false,
+          "isSecret": true
+        },
+        {
+          "name": "PAYMENT-SIGNATURE",
+          "description": "Optional x402 v2 Base64 payment payload header for per-call USDC settlement.",
+          "isRequired": false,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}
