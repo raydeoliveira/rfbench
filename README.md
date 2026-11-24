@@ -5,10 +5,13 @@ Deterministic Smith-chart, transmission-line, IEC 60063 E-series impedance match
 ## Live Service
 
 - **Streamable HTTP MCP**: `https://rfbench-mcp.raymond-deoliveira.workers.dev/mcp`
-- **Server Card**: `https://rfbench-mcp.raymond-deoliveira.workers.dev/.well-known/mcp/server-card.json`
-- **Health Check**: `https://rfbench-mcp.raymond-deoliveira.workers.dev/health`
+- **Server Card**: `https://rfbench-mcp.raymond-deoliveira.workers.dev/.well-known/mcp/server-card.json` (`GET`/`HEAD`, exposes `authentication.polarCheckoutUrl`)
+- **Health Check**: `https://rfbench-mcp.raymond-deoliveira.workers.dev/health` (`GET`/`HEAD`)
 - **Official MCP Registry**: `io.github.raydeoliveira/rfbench` (`0.1.0`)
+- **Glama Connector**: https://glama.ai/mcp/connectors/io.github.raydeoliveira/rfbench
 - **Product Page**: https://www.raymonddeoliveira.com/software#rfbench
+
+All 6 tools expose MCP `2025-03-26` tool `annotations` (`readOnlyHint: true`, `destructiveHint: false`, `idempotentHint: true`, `openWorldHint: false`) in `tools/list`.
 
 ## Tools & Pricing
 
@@ -25,10 +28,44 @@ Deterministic Smith-chart, transmission-line, IEC 60063 E-series impedance match
 
 - **Free tier**: No authentication required for `rf_smith_transform` and `rf_link_budget`.
 - **x402 v2 (`PAYMENT-SIGNATURE`)**: Base Mainnet (`eip155:8453`) USDC (`0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`) per-call settlement verified before tool execution and settled only after valid tool output (`RfValidationError` inputs never charge).
-- **Polar License (`X-Polar-License-Key`)**: Unlocks metered tools via https://polar.sh/raymond-de-oliveira.
+- **Polar License (`X-Polar-License-Key`)**: Unlocks metered tools via https://buy.polar.sh/polar_cl_mOqAzUHFS8WLUnO5GA1QR7C7933zfjDqIA4h44MLSGA.
 - **Bearer API Key (`Authorization: Bearer <key>`)**: Organization API key authentication.
 
-Unauthenticated metered requests return HTTP `402` with Base64 `PAYMENT-REQUIRED` and `WWW-Authenticate: Payment` headers.
+Unauthenticated metered requests return HTTP `402` with Base64 `PAYMENT-REQUIRED` and `WWW-Authenticate: Payment` headers plus `error.data.polarCheckoutUrl` (also exposed at `authentication.polarCheckoutUrl` on the server card).
+
+## MCP Client Quickstart
+
+### Claude Code
+
+```bash
+claude mcp add --transport http rfbench https://rfbench-mcp.raymond-deoliveira.workers.dev/mcp
+```
+
+With a Polar license key for metered tools:
+
+```bash
+claude mcp add --transport http rfbench https://rfbench-mcp.raymond-deoliveira.workers.dev/mcp \
+  --header "X-Polar-License-Key: $RFBENCH_POLAR_KEY"
+```
+
+### Cursor / Generic Streamable HTTP JSON
+
+Add to `.cursor/mcp.json` or your MCP client's `mcpServers` config:
+
+```json
+{
+  "mcpServers": {
+    "rfbench": {
+      "url": "https://rfbench-mcp.raymond-deoliveira.workers.dev/mcp",
+      "headers": {
+        "X-Polar-License-Key": "${RFBENCH_POLAR_KEY}"
+      }
+    }
+  }
+}
+```
+
+Omit `"headers"` to use the free tools (`rf_smith_transform`, `rf_link_budget`) without credentials.
 
 ## Quickstart (`curl`)
 
@@ -57,5 +94,6 @@ curl -sS https://rfbench-mcp.raymond-deoliveira.workers.dev/mcp \
 ## Documentation & Security
 
 - [SKILL.md](./SKILL.md) — MCP schema details, exit codes, and tool conventions
+- [glama.json](./glama.json) — Glama directory maintainer manifest
 - [SECURITY.md](./SECURITY.md) — Request bounds, numeric overflow guards, and vulnerability reporting
 - [LICENSE](./LICENSE) — Proprietary license terms

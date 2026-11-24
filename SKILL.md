@@ -30,9 +30,11 @@ Reference inputs live in `fixtures/` (`antenna_915mhz.s1p`, `filter_1500mhz.s2p`
 ## Streamable HTTP MCP (`2025-03-26`)
 
 - **Hosted endpoint**: `https://rfbench-mcp.raymond-deoliveira.workers.dev/mcp`
-- `GET /health` — Service status, version, protocol version, tool count (`6`).
-- `GET /.well-known/mcp/server-card.json` (and `GET /`) — Tool catalog, pricing tiers, and auth methods.
-- `POST /mcp` — JSON-RPC 2.0 (`initialize`, `ping`, `tools/list`, `tools/call`; flat object tool schemas without `oneOf`/`anyOf`/`allOf`; non-POST returns `405` with `Allow: POST, OPTIONS`; CORS exposes `Mcp-Session-Id`; notifications return HTTP `202`, body > `262,144` bytes returns `413`, invalid JSON returns `400`).
+- **Glama Connector**: `https://glama.ai/mcp/connectors/io.github.raydeoliveira/rfbench`
+- **Polar Checkout (`$29` Pro key)**: `https://buy.polar.sh/polar_cl_mOqAzUHFS8WLUnO5GA1QR7C7933zfjDqIA4h44MLSGA`
+- `GET`/`HEAD /health` — Service status, version, protocol version, tool count (`6`).
+- `GET`/`HEAD /.well-known/mcp/server-card.json` (and `GET`/`HEAD /`) — Tool catalog, pricing tiers, auth methods, and `polarCheckoutUrl`.
+- `POST /mcp` — JSON-RPC 2.0 (`initialize`, `ping`, `tools/list`, `tools/call`; flat object tool schemas without `oneOf`/`anyOf`/`allOf` and read-only/idempotent MCP `annotations`; non-POST returns `405` with `Allow: POST, OPTIONS`; CORS exposes `Mcp-Session-Id`; notifications return HTTP `202`, body > `262,144` bytes returns `413`, invalid JSON returns `400`).
 
 Authentication for metered tools (`rf_match_network`, `rf_txline`, `rf_touchstone_analyze`, `rf_fcc_compliance`):
 1. `PAYMENT-SIGNATURE` (or `X-PAYMENT` / `Authorization: Payment`) — x402 v2 verify + settle (`PAYMENT-RESPONSE` header on `200`).
