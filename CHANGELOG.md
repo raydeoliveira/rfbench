@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.2
+- Promoted `rf_touchstone_analyze` (`rfbench s-param`) from `$0.015` metered to Free (`$0`, zero auth, zero Apify PPE charge) so RF and NanoVNA users get full Touchstone `.s1p`/`.s2p` VNA analysis, de-embedding, passbands, and Rollett `K` stability free (`4` free / `2` metered tools: `rf_match_network`, `rf_fcc_compliance`).
+- Exposed `GET`/`HEAD /llms.txt` and enriched `/.well-known/mcp/server-card.json` (`llmsTxt`, `documentationUrl`, structured `pricing`, `quickStart`) for self-discovering AI clients.
+
 ## 0.1.1
 - Promoted `rf_txline` (`rfbench txline`) from `$0.005` metered to Free (`$0`, zero auth, zero Apify PPE charge) so RF engineers and AI agents get full Smith-chart transforms, Friis link budgets, and lossless/lossy transmission-line math free out of the box (`3` free / `3` metered tools).
 

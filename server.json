@@ -2,8 +2,8 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.raydeoliveira/rfbench",
   "title": "rfbench RF Math & FCC Compliance Oracle (MCP)",
-  "description": "Free Smith chart, link budget & txline + metered matching, S-param & FCC oracle via HTTP 402.",
-  "version": "0.1.1",
+  "description": "Free Smith, link, txline & Touchstone .s1p/.s2p + metered match & FCC oracle via HTTP 402.",
+  "version": "0.1.2",
   "websiteUrl": "https://github.com/raydeoliveira/rfbench",
   "repository": {
     "url": "https://github.com/raydeoliveira/rfbench",

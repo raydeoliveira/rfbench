@@ -10,7 +10,7 @@ Deterministic Smith-chart, transmission-line, IEC 60063 E-series impedance match
 | `rf_link_budget` / `rfbench link` | Free (`$0`) | Friis FSPL, EIRP/ERP, `290 K` thermal noise floor, SNR, binding link margin, 1st Fresnel midpoint radius, and max range |
 | `rf_txline` / `rfbench txline` | Free (`$0`) | Lossless and lossy `Z_in`, `Gamma_in`, `VSWR_in`, wavelength, dissipative/transducer loss, and quarter-wave `Z0` |
 | `rf_match_network` / `rfbench match` | Metered (`$0.01`) | Analytical L, Pi, and T matching with `Q_min` guards, `2^N` bracketing `E12`/`E24`/`E48`/`E96` snapping, finite-Q insertion loss, and `2^N` tolerance corner VSWR |
-| `rf_touchstone_analyze` / `rfbench s-param` | Metered (`$0.015`) | IEEE Touchstone v1.0 `.s1p`/`.s2p` (`HZ`/`KHZ`/`MHZ`/`GHZ`, `RI`/`MA`/`DB`), uniform single-pass phase rotation `S_ij * exp(+j * 2 * pi * f * delay_ps * 1e-12)` across `s11, s21, s12, s22` (use `delay_ps = 2 * tau` for 1-port round-trip VNA fixture extension of one-way delay `tau`), VSWR passband, insertion loss, reverse isolation, group delay, and Rollett `K`/`\|Delta\|` stability |
+| `rf_touchstone_analyze` / `rfbench s-param` | Free (`$0`) | IEEE Touchstone v1.0 `.s1p`/`.s2p` (`HZ`/`KHZ`/`MHZ`/`GHZ`, `RI`/`MA`/`DB`), uniform single-pass phase rotation `S_ij * exp(+j * 2 * pi * f * delay_ps * 1e-12)` across `s11, s21, s12, s22` (use `delay_ps = 2 * tau` for 1-port round-trip VNA fixture extension of one-way delay `tau`), VSWR passband, insertion loss, reverse isolation, group delay, and Rollett `K`/`\|Delta\|` stability |
 | `rf_fcc_compliance` / `rfbench fcc` | Metered (`$0.02`) | 47 CFR §15.107/15.109/15.207/15.209 radiated and conducted limits (`20*log10` >=30 MHz, `40*log10` <30 MHz), plus §15.247 ISM harmonic comb and §15.205 restricted-band collision checks |
 | HTTP `402` MCP & stdio MCP | MCP `2025-03-26` | Live Worker at `https://rfbench-mcp.raymond-deoliveira.workers.dev/mcp`: `GET`/`HEAD /health`, `GET`/`HEAD /.well-known/mcp/server-card.json`, `POST /mcp` (flat schemas, read-only/idempotent `annotations`, `405` + `Allow` on non-POST, Free, SHA-256 Bearer, Polar `/validate`, deferred x402 v2 `/verify`+`/settle`), plus `rfbench mcp` over stdin/stdout |
 | Apify Actor & Standby MCP | PPE / Standby | Single (`{ tool, arguments }`) and batch (`{ calls }`) Dataset/`OUTPUT` runs plus Standby HTTP `/mcp` with readiness probe and Pay-Per-Event charging |
@@ -37,8 +37,8 @@ Measured runs on `node v25.9.0` (macOS):
 - Representative CLI latency (median of 5 runs on `node v25.9.0`): `388.5 ms` (`smith --z 25+j50 --freq-hz 100e6 --json`), `415.3 ms` (`s-param --touchstone fixtures/antenna_915mhz.s1p --json`).
 
 Hosted & container deployment:
-- **Live Cloudflare Worker**: Deployed at `https://rfbench-mcp.raymond-deoliveira.workers.dev` (MCP endpoint `POST /mcp`, discovery card `GET`/`HEAD /.well-known/mcp/server-card.json`, health `GET`/`HEAD /health`, telemetry in `METER_KV`).
-- **Official MCP Registry**: `io.github.raydeoliveira/rfbench` (`0.1.0`) — https://registry.modelcontextprotocol.io/v0/servers?search=rfbench
+- **Live Cloudflare Worker**: Deployed at `https://rfbench-mcp.raymond-deoliveira.workers.dev` (MCP endpoint `POST /mcp`, agent summary `GET`/`HEAD /llms.txt`, discovery card `GET`/`HEAD /.well-known/mcp/server-card.json`, health `GET`/`HEAD /health`, telemetry in `METER_KV`).
+- **Official MCP Registry**: `io.github.raydeoliveira/rfbench` (`0.1.2`) — https://registry.modelcontextprotocol.io/v0/servers?search=rfbench
 - **Glama Connector**: https://glama.ai/mcp/connectors/io.github.raydeoliveira/rfbench
 - **Polar Pro License (`$29` perpetual, up to 3 devices)**: https://buy.polar.sh/polar_cl_mOqAzUHFS8WLUnO5GA1QR7C7933zfjDqIA4h44MLSGA
 - **Apify Actor / Standby**: Verified `234 MB` `node:22-alpine` container (`FROM node:22-alpine`, zero `npm install`, non-root `USER node`, requires Node `>= 22.18` native type-stripping) across batch Actor and HTTP Standby modes.
