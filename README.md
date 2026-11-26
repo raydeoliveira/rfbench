@@ -1,8 +1,10 @@
-# rfbench
+# RFBench
 
-Deterministic Smith-chart, transmission-line, IEC 60063 E-series impedance matching, link-budget, Touchstone `.s1p`/`.s2p`, and 47 CFR Part 15 FCC compliance math oracle in zero-dependency TypeScript (`node >= 22.12.0`, Cloudflare Workers, and Apify Actor / Standby MCP).
+RFBench calculates VSWR and return loss from RF impedance, analyzes Touchstone `.s1p` and `.s2p` sweeps, and models impedance-matching networks and link budgets.
 
 ## Quick Start
+
+[Try RFBench on Apify](https://apify.com/raydeoliveira/rfbench-mcp). Run the prefilled 75 Ω load on a 50 Ω line at 100 MHz, then open the default dataset. The single row gives `data.vswr` of **1.5** and `data.return_loss_db` of **13.9794 dB**, rounded. This example uses zero paid Actor events.
 
 Calculate the standing-wave ratio of a 25 + j50 Ω load on a 50 Ω line at 100 MHz. This free hosted call needs only curl.
 
@@ -65,7 +67,7 @@ These are circuit-model results for a synthetic load. To reproduce the calculati
 
 Use the hosted endpoint with curl or an MCP client. The public GitHub repository contains documentation and MCP metadata. The local CLI, fixtures and tests require a separate source checkout.
 
-The source checkout requires Node.js `>= 22.12.0` (verified on `v25.9.0`; `0` runtime and `0` dev npm dependencies, `267,022` bytes / `260.8 KiB` source across `29` TypeScript files and `5,781` lines in `src/`, `312 KB` on disk via `du -sk`, `768 KB` project total):
+The source checkout requires Node.js `>= 22.18.0` for native TypeScript execution (verified on `v25.9.0`; `0` runtime and `0` dev npm dependencies, `267,022` bytes / `260.8 KiB` source across `29` TypeScript files and `5,781` lines in `src/`, `312 KB` on disk via `du -sk`, `768 KB` project total):
 
 ```bash
 node --test tests/*.test.ts
