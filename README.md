@@ -127,6 +127,8 @@ API_KEYS_CSV="demo-key" node src/adapters/cli.ts serve --port 0
 
 Unauthenticated metered `POST /mcp` calls fail closed with HTTP `402` plus Base64 `PAYMENT-REQUIRED` and `WWW-Authenticate` headers (linking to live Polar checkout `https://buy.polar.sh/polar_cl_mOqAzUHFS8WLUnO5GA1QR7C7933zfjDqIA4h44MLSGA` and x402 v2 requirements); authenticated calls (`Authorization: Bearer demo-key`, `X-Polar-License-Key`, or x402 v2 `PAYMENT-SIGNATURE`) return HTTP `200` with JSON-RPC `result.structuredContent`.
 
+From your project directory, run `npx skills add raydeoliveira/rfbench` to install the [agent reference](SKILL.md) for RF impedance and Touchstone sweeps.
+
 Connect Claude Code (free tier out of the box, or pass `-H "X-Polar-License-Key: ..."`):
 
 ```bash
