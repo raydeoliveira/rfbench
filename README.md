@@ -2,6 +2,18 @@
 
 Deterministic Smith-chart, transmission-line, IEC 60063 E-series impedance matching, link-budget, Touchstone `.s1p`/`.s2p`, and 47 CFR Part 15 FCC compliance math oracle in zero-dependency TypeScript (`node >= 22.12.0`, Cloudflare Workers, and Apify Actor / Standby MCP).
 
+## Quick Start
+
+Calculate the standing-wave ratio of a 25 + j50 Ω load on a 50 Ω line at 100 MHz. This free hosted call needs only curl.
+
+```bash
+curl -sS https://rfbench-mcp.raymond-deoliveira.workers.dev/mcp \
+  -H 'Content-Type: application/json' \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"rf_smith_transform","arguments":{"z":{"re":25,"im":50},"freq_hz":100000000}}}'
+```
+
+The response gives `vswr` of `4.265564437074637` and `return_loss_db` of `4.149733479708181` under `result.structuredContent`. To keep the example handy, star [RFBench on GitHub](https://github.com/raydeoliveira/rfbench).
+
 ## What It Does / What It Does Not Do
 
 | Surface / Tool | Tier / Price | What It Does |
@@ -23,7 +35,9 @@ Deterministic Smith-chart, transmission-line, IEC 60063 E-series impedance match
 
 ## Install & Uninstall
 
-Requires Node.js `>= 22.12.0` (verified on `v25.9.0`; `0` runtime and `0` dev npm dependencies, `267,022` bytes / `260.8 KiB` source across `29` TypeScript files and `5,781` lines in `src/`, `312 KB` on disk via `du -sk`, `768 KB` project total):
+Use the hosted endpoint with curl or an MCP client. The public GitHub repository contains documentation and MCP metadata. The local CLI, fixtures and tests require a separate source checkout.
+
+The source checkout requires Node.js `>= 22.12.0` (verified on `v25.9.0`; `0` runtime and `0` dev npm dependencies, `267,022` bytes / `260.8 KiB` source across `29` TypeScript files and `5,781` lines in `src/`, `312 KB` on disk via `du -sk`, `768 KB` project total):
 
 ```bash
 node --test tests/*.test.ts
@@ -45,9 +59,9 @@ Hosted & container deployment:
 
 To uninstall locally, remove the directory (`rm -rf rfbench`).
 
-## Quick Start
+## CLI and MCP examples
 
-### 1. Human & `--json` Agent CLI
+### 1. Local CLI (source checkout)
 
 Run Smith-chart conversion and inspect structured `--json` output:
 
@@ -74,7 +88,7 @@ node src/adapters/cli.ts fcc --input fixtures/fcc_ism_comb_2440mhz.json --json
 
 ### 2. HTTP `402` Streamable HTTP MCP Server
 
-Dry-run and start the local HTTP `402` MCP server:
+From a source checkout, dry-run and start the local HTTP `402` MCP server:
 
 ```bash
 node src/adapters/cli.ts serve --dry-run --json
@@ -89,22 +103,19 @@ Connect Claude Code (free tier out of the box, or pass `-H "X-Polar-License-Key:
 claude mcp add --transport http rfbench https://rfbench-mcp.raymond-deoliveira.workers.dev/mcp
 ```
 
-Or add to Cursor / Claude Desktop / MCP client JSON configuration:
+For a client that accepts `mcpServers` JSON, configure the free hosted tools with the server URL.
 
 ```json
 {
   "mcpServers": {
     "rfbench": {
-      "url": "https://rfbench-mcp.raymond-deoliveira.workers.dev/mcp",
-      "headers": {
-        "X-Polar-License-Key": "${RFBENCH_POLAR_KEY}"
-      }
+      "url": "https://rfbench-mcp.raymond-deoliveira.workers.dev/mcp"
     }
   }
 }
 ```
 
-### 3. Apify Actor & Standby MCP
+### 3. Apify Actor & Standby MCP (source checkout)
 
 Run offline Actor mode against `APIFY_LOCAL_STORAGE_DIR`:
 
@@ -139,7 +150,8 @@ APIFY_META_ORIGIN=STANDBY ACTOR_WEB_SERVER_PORT=0 node src/adapters/apify_main.t
 | `5` | License or HTTP `402` payment entitlement error |
 | `130` | `SIGINT` interrupted |
 
-Inspect full CLI flags and schemas with `--help` or `--describe`, and inspect reference inputs under `fixtures/`:
+In a source checkout, inspect CLI flags and schemas with `--help` or `--describe`. Reference inputs live under `fixtures/`.
+
 - `fixtures/antenna_915mhz.s1p`
 - `fixtures/filter_1500mhz.s2p`
 - `fixtures/match_915mhz_e24.json`
