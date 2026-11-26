@@ -26,6 +26,22 @@ curl -q -fsS --max-time 15 https://rfbench-mcp.raymond-deoliveira.workers.dev/mc
 
 VSWR is 3 at 900 MHz, 1 at 910 MHz and 3 at 920 MHz. RFBench linearly interpolates these sampled VSWR values to estimate the 2:1 crossings. The band in `result.structuredContent.passbands` runs from 905 to 915 MHz (`bandwidth_hz` = `10000000`).
 
+### What a one-cent matching calculation returns
+
+For a 15 − j30 Ω load at 915 MHz, RFBench selected a 10 nH shunt inductor across the load followed by a 6.2 nH series inductor toward the 50 Ω source. Both values are in the E24 series.
+
+| Calculated result | Value |
+|---|---:|
+| Nominal VSWR with component Q of 50 | 1.0376 |
+| Worst VSWR over the four ±5% component corners | 1.1294 |
+| Insertion loss at the design frequency | 0.175 dB |
+
+These are circuit-model results for a synthetic load. To reproduce the calculation, call `rf_match_network` with these arguments. The hosted fee is $0.01 per matching calculation through x402, or the tool accepts a $29 perpetual Pro key.
+
+```json
+{"z_load":{"re":15,"im":-30},"z_source":{"re":50,"im":0},"freq_hz":915000000,"topology":"l-network","series":"E24","component_q":50,"max_vswr":1.5}
+```
+
 ## What It Does / What It Does Not Do
 
 | Surface / Tool | Tier / Price | What It Does |
