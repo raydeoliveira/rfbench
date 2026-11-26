@@ -1,10 +1,10 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.raydeoliveira/rfbench",
-  "title": "rfbench RF Math & FCC Compliance Oracle (MCP)",
-  "description": "Free Smith, link, txline & Touchstone .s1p/.s2p + metered match & FCC oracle via HTTP 402.",
-  "version": "0.1.2",
-  "websiteUrl": "https://github.com/raydeoliveira/rfbench",
+  "title": "RFBench for RF impedance, Touchstone and matching",
+  "description": "Free impedance, link-budget and Touchstone analysis. Metered matching and FCC Part 15 pre-checks.",
+  "version": "0.1.3-1",
+  "websiteUrl": "https://www.raymonddeoliveira.com/software#rfbench-example",
   "repository": {
     "url": "https://github.com/raydeoliveira/rfbench",
     "source": "github"
@@ -16,7 +16,7 @@
       "headers": [
         {
           "name": "X-Polar-License-Key",
-          "description": "Optional Polar.sh license key unlocking metered matching, Touchstone, and FCC Part 15 tools.",
+          "description": "Optional Polar license key for impedance matching and FCC Part 15 pre-compliance.",
           "isRequired": false,
           "isSecret": true
         },
