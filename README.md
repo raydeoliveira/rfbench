@@ -14,6 +14,18 @@ curl -sS https://rfbench-mcp.raymond-deoliveira.workers.dev/mcp \
 
 The response gives `vswr` of `4.265564437074637` and `return_loss_db` of `4.149733479708181` under `result.structuredContent`. To keep the example handy, star [RFBench on GitHub](https://github.com/raydeoliveira/rfbench).
 
+### Find the 2:1 VSWR band in a Touchstone sweep
+
+Paste a one-port VNA sweep as `.s1p` text. This anonymous call uses three synthetic samples on a 50 Ω reference.
+
+```bash
+curl -q -fsS --max-time 15 https://rfbench-mcp.raymond-deoliveira.workers.dev/mcp \
+  -H 'Content-Type: application/json' \
+  --data-binary '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"rf_touchstone_analyze","arguments":{"touchstone_text":"# MHz S RI R 50\n900 0.5 0\n910 0 0\n920 0.5 0","vswr_threshold":2}}}'
+```
+
+VSWR is 3 at 900 MHz, 1 at 910 MHz and 3 at 920 MHz. RFBench linearly interpolates these sampled VSWR values to estimate the 2:1 crossings. The band in `result.structuredContent.passbands` runs from 905 to 915 MHz (`bandwidth_hz` = `10000000`).
+
 ## What It Does / What It Does Not Do
 
 | Surface / Tool | Tier / Price | What It Does |
@@ -52,7 +64,7 @@ Measured runs on `node v25.9.0` (macOS):
 
 Hosted & container deployment:
 - **Live Cloudflare Worker**: Deployed at `https://rfbench-mcp.raymond-deoliveira.workers.dev` (MCP endpoint `POST /mcp`, agent summary `GET`/`HEAD /llms.txt`, discovery card `GET`/`HEAD /.well-known/mcp/server-card.json`, health `GET`/`HEAD /health`, telemetry in `METER_KV`).
-- **Official MCP Registry**: `io.github.raydeoliveira/rfbench` (`0.1.2`) — https://registry.modelcontextprotocol.io/v0/servers?search=rfbench
+- [Official MCP Registry listing](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.raydeoliveira%2Frfbench/versions/latest)
 - **Glama Connector**: https://glama.ai/mcp/connectors/io.github.raydeoliveira/rfbench
 - **Polar Pro License (`$29` perpetual, up to 3 devices)**: https://buy.polar.sh/polar_cl_mOqAzUHFS8WLUnO5GA1QR7C7933zfjDqIA4h44MLSGA
 - **Apify Actor / Standby**: Verified `234 MB` `node:22-alpine` container (`FROM node:22-alpine`, zero `npm install`, non-root `USER node`, requires Node `>= 22.18` native type-stripping) across batch Actor and HTTP Standby modes.
